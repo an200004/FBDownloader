@@ -1,0 +1,7 @@
+fb\db\DBOperation.class
+fb\operation\AccessToken.class
+fb\operation\Testing.class
+fb\operation\ApplicationInformation.class
+fb\config\RestApplication.class
+fb\operation\PageOperation.class
+fb\object\Page.class
