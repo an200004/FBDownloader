@@ -17,6 +17,8 @@ import com.google.gson.Gson;
 import fb.db.DBOperation;
 import fb.object.Album;
 import fb.object.Page;
+import fb.object.PageAlbumsFB;
+import fb.object.PageFB;
 import fb.queue.QueueManagement;
 
 @Path("page")
@@ -27,29 +29,29 @@ public class PageOperation {
 	@Path("allpages")
 	public String allPages() {
 		
-		boolean hasNext = true;
 		List<Page> pages = new ArrayList<Page>();
 		
 		JsonObject pagesObject = ApplicationInformation.getResult("me/likes", true, true);
-	
-		while (hasNext) {
+		PageFB pageFb = new Gson().fromJson(pagesObject.toString(), PageFB.class);
+		
+		while (pageFb != null && pageFb.getData().length > 0) {
 			
-			pagesObject.getJsonArray("data").forEach(k -> {
-				
-				if (DBOperation.getPage(((JsonObject)k).getString("id")) == null) {
+			for (PageFB.PageFBData pageFbData : pageFb.getData()) {
+				if (DBOperation.getPage(pageFbData.getId()) == null) {
 					Page page = new Page();
-					page.setId(((JsonObject)k).getString("id"));
-					page.setName(((JsonObject)k).getString("name"));
+					page.setId(pageFbData.getId());
+					page.setName(pageFbData.getName());
 					page.setExclude(true);
-					
 					pages.add(page);
+					System.out.println(pageFbData.getName());
 				}
-			});
+			}
 			
-			if (pagesObject.getJsonObject("paging").containsKey("next")) {
-				pagesObject = ApplicationInformation.getResult(pagesObject.getJsonObject("paging").getString("next").trim(), false, false);
+			if (pageFb.getNext() != null && pageFb.getNext().trim().length() > 0) {
+				pagesObject = ApplicationInformation.getResult(pageFb.getNext().trim(), false, false);
+				pageFb = new Gson().fromJson(pagesObject.toString(), PageFB.class);
 			} else {
-				hasNext = false;
+				pageFb = null;
 			}
 			
 		}
@@ -62,68 +64,37 @@ public class PageOperation {
 		return "";
 	}
 	
-	public String getPageAlbums() {
+	public String getPageAlbums(Page page) {
 		
-		findRequiredPages().forEach(page -> {
 			JsonObject albumObject = ApplicationInformation.getResult(MessageFormat.format("{0}?fields=albums", page.getId().trim()), true, true);
 			
-			boolean hasNext = true;
+			PageAlbumsFB pageAlbumsFb =  new Gson().fromJson(albumObject.toString(), PageAlbumsFB.class);
 			
-			while (hasNext) {
-				if (albumObject.containsKey("albums") || albumObject.containsKey("data")) {
-	//				Object obj = albumObject.getValue("data");
-					JsonObject dataAlbumObject = albumObject.getJsonObject("albums");
+			while (pageAlbumsFb != null && pageAlbumsFb.getAlbums().length > 0) {
+				for (PageAlbumsFB.AlbumFB albumFB : pageAlbumsFb.getAlbums()) {
+					Album albumObj = new Album();
+					albumObj.setId(albumFB.getId());
+					albumObj.setName(albumFB.getName());
+					albumObj.setPage_name(page.getName());
+					QueueManagement.sendMessage(new Gson().toJson(albumObj), ApplicationInformation.QUEUE_CONNECTION_STRING, ApplicationInformation.PAGE_ALBUM_QUEUE_NAME);
+					System.out.println(albumObj.getName());
 					
-					if (dataAlbumObject == null) {
-						dataAlbumObject = albumObject;
-					}
-					
-					if (dataAlbumObject.containsKey("data")) {
-						JsonArray dataAlbum = dataAlbumObject.getJsonArray("data");
-						
-						dataAlbum.forEach(album -> {
-							Album albumObj = new Album();
-							albumObj.setId(album.asJsonObject().getString("id"));
-							albumObj.setName(album.asJsonObject().getString("name"));
-							albumObj.setPage_name(page.getName());
-							
-							QueueManagement.sendMessage(new Gson().toJson(albumObj), ApplicationInformation.QUEUE_CONNECTION_STRING, ApplicationInformation.PAGE_ALBUM_QUEUE_NAME);
-							System.out.println(album.asJsonObject().getString("name"));
-						});
-						System.out.println("");
-						
-						if (dataAlbumObject.containsKey("paging")) {
-							JsonObject pagingAlbum = dataAlbumObject.getJsonObject("paging");
-							if (pagingAlbum.containsKey("next") && pagingAlbum.getString("next") != null && pagingAlbum.getString("next").trim().length() > 0) {
-								albumObject = ApplicationInformation.getResult(pagingAlbum.getString("next").trim(), false, false);
-							} else {
-								hasNext = false;
-							}
-						} else {
-							hasNext = false;
-						}
-					} else {
-						hasNext = false;
-					}
-					
-				} else {
-					hasNext = false;
 				}
 				
+				if (pageAlbumsFb.getNext() != null && pageAlbumsFb.getNext().trim().length() > 0) {
+					albumObject = ApplicationInformation.getResult(pageAlbumsFb.getNext().trim(), false, false);
+					pageAlbumsFb = new Gson().fromJson(albumObject.toString(), PageAlbumsFB.class);
+				} else {
+					pageAlbumsFb = null;
+				}
 			}
-			
-			
-		});
-			
+		
+					
 		return "";
 	}
 	
-	private List<Page> findRequiredPages() {
+	public List<Page> findRequiredPages() {
 		List<Page> pages = DBOperation.getExcludePages();
-		
-//		pages.forEach(page -> {
-//			System.out.println(page.getId());
-//		});
 		
 		return pages;
 	}
@@ -131,7 +102,10 @@ public class PageOperation {
 	public static void main(String args[]) {
 		PageOperation po = new PageOperation();
 //		po.allPages();
-//		po.findRequiredPages();
-		po.getPageAlbums();
+//		List<Page> pages = po.findRequiredPages();
+//		pages.forEach(p -> {
+//			System.out.println(p.getName());
+//		});
+//		po.getPageAlbums();
 	}
 }

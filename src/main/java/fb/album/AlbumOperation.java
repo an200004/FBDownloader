@@ -8,6 +8,7 @@ import javax.json.JsonObject;
 import com.google.gson.Gson;
 
 import fb.object.Album;
+import fb.object.PageAlbumsFB.AlbumFB;
 import fb.object.Photo;
 import fb.operation.ApplicationInformation;
 import fb.queue.QueueManagement;
@@ -21,7 +22,25 @@ public class AlbumOperation {
 		counter = 1;
 		JsonObject photosObject = ApplicationInformation.getResult(MessageFormat.format("{0}?fields=photos", album.getId().trim()), true, true);
 		
-		while (hasNext) {
+		fb.object.AlbumFB albumFb = new Gson().fromJson(photosObject.toString(), fb.object.AlbumFB.class);
+		
+		while (albumFb != null && albumFb.getPhotos() != null && albumFb.getPhotos().length > 0) {
+			for (fb.object.AlbumFB.Photo photoFb : albumFb.getPhotos()) {
+				Photo photo = new Photo();
+				photo.setAlbum(album);
+				photo.setId(photoFb.getId());
+				QueueManagement.sendMessage(new Gson().toJson(photo), ApplicationInformation.QUEUE_CONNECTION_STRING, ApplicationInformation.PAGE_ALBUM_PHOTO_QUEUE_NAME);
+				System.out.println(photo.getId());
+			}
+			
+			if (albumFb.getNext() != null && albumFb.getNext().trim().length() > 0) {
+				photosObject = ApplicationInformation.getResult(albumFb.getNext(), false, false);
+			} else {
+				albumFb = null;
+			}
+		}
+		
+		/*while (hasNext) {
 			if (photosObject.containsKey("photos") || photosObject.containsKey("data")) {
 				JsonObject photoDataObject = photosObject.getJsonObject("photos");
 				
@@ -54,7 +73,7 @@ public class AlbumOperation {
 			} else {
 				hasNext = false;
 			}
-		}
+		}*/
 		
 		
 //		507443009420458?fields=photos

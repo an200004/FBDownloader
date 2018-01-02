@@ -8,6 +8,7 @@ import javax.persistence.Persistence;
 import javax.transaction.Transactional;
 
 import fb.object.Page;
+import fb.object.DownloadedPhotoDB;;
 
 public class DBOperation {
 
@@ -48,5 +49,8 @@ public class DBOperation {
 		
 		return pages;
 	}
-	
+
+	public static DownloadedPhotoDB getDownloadedPhoto(String photoId) {
+		return em.find(DownloadedPhotoDB.class, photoId);
+	}
 }

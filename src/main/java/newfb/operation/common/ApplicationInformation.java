@@ -1,4 +1,4 @@
-package fb.operation;
+package newfb.operation.common;
 
 import java.io.StringReader;
 import java.text.MessageFormat;
@@ -23,7 +23,7 @@ public class ApplicationInformation {
 
 	public static String APP_ID = "1531281533583122";
 	public static String APP_SECRET = "3703878aca02b5341adf0bb9b0f8caef";
-	public static String APP_ACCESS_TOKEN = "EAACEdEose0cBAAzsq8QZAKqWo6MHtmVV7FRt9yBWg4PLkZChXiujFKM4N56ondNCavbECSW9ETozTmGWFRwiG3wqga5relwKUb6UXqAcL5ZBDORRN4clZC6FPlXDO5SaSlNvC96sTSzZCh7CRCJ7jED7zsiNBTEZCykNEwUKEmRPrG1ZBfZAk04hWBpc80lnwiWnfVpXQc4kjQZDZD";
+	public static String APP_ACCESS_TOKEN = "EAACEdEose0cBAEobx43Urd0nbgNwoOrzZBpFVVybxPXZAfZAOJCAfKHqhpr7tmLhXHwOwQcuKNfzqf4TP9eDe1J0OjM90iZAAwrEougeRHltQzOjsB58QYZBX7COmZBE1agb4SaeTqZAOVPln6ZCVxm1frbvbTkJL0wmZCExFiVx8pQCzsxjlOpEKLxJ95Kg0yOEZD";
 	
 	public static String HOST_GRAPH_API = "https://graph.facebook.com";
 	public static String VERSION = "v2.10";
@@ -37,14 +37,7 @@ public class ApplicationInformation {
     
 	public static Client APPLICATION = ClientBuilder.newClient();
 	
-//	static {
-//		JsonObject object = 
-//				getResult(MessageFormat.format("oauth/access_token?client_id={0}&client_secret={1}&grant_type=client_credentials", new String[]{APP_ID, APP_SECRET}), false); 
-//		
-//		APP_ACCESS_TOKEN = object.getString("access_token").replace((APP_ID + "|"), "");
-//	}
-	
-	public static JsonObject getResult(String target, boolean appendHost, boolean appendAccessToken) {
+	public static synchronized JsonObject getResult(String target, boolean appendHost, boolean appendAccessToken) {
 		
 		String accessToken = (target.contains("?") ? "&" : "?") + "access_token=";
 		

@@ -1,5 +1,7 @@
 package fb.album;
 
+import java.util.concurrent.TimeUnit;
+
 import com.google.gson.Gson;
 
 import fb.object.Album;
@@ -22,7 +24,7 @@ public class FBPageAlbumOperation {
 				
 			} else {
 				try {
-					Thread.sleep(10000);
+					TimeUnit.MINUTES.sleep(10);
 				} catch (InterruptedException ie) { ie.printStackTrace();}
 			}
 		}
