@@ -17,13 +17,17 @@ import javax.ws.rs.core.Response.Status.Family;
 
 import org.glassfish.jersey.client.internal.HttpUrlConnector;
 
+import com.google.gson.Gson;
+
 import javassist.expr.NewArray;
+import newfb.object.common.FBObject;
+import newfb.object.like.LikeObject;
 
 public class ApplicationInformation {
 
 	public static String APP_ID = "1531281533583122";
 	public static String APP_SECRET = "3703878aca02b5341adf0bb9b0f8caef";
-	public static String APP_ACCESS_TOKEN = "EAACEdEose0cBAEobx43Urd0nbgNwoOrzZBpFVVybxPXZAfZAOJCAfKHqhpr7tmLhXHwOwQcuKNfzqf4TP9eDe1J0OjM90iZAAwrEougeRHltQzOjsB58QYZBX7COmZBE1agb4SaeTqZAOVPln6ZCVxm1frbvbTkJL0wmZCExFiVx8pQCzsxjlOpEKLxJ95Kg0yOEZD";
+	public static String APP_ACCESS_TOKEN = "EAACEdEose0cBAIMi1MuEqCDZC1JR18wXegQBUDmuW0wqeaiUYzoeRAn01LgZAZBc26kduwWkTFgKAgWEnCrY3ZAAXWSgiVWwdOq7DwXu1jZAUmQnuwRMCg8VilJwsZBrradV7gE4BYdIuUsHzjjZBpG9sAOtajPvZAmDXyXanJNM2ZCzO0ouZAc07KB2tPU4Nlo6QZD";
 	
 	public static String HOST_GRAPH_API = "https://graph.facebook.com";
 	public static String VERSION = "v2.10";
@@ -37,7 +41,7 @@ public class ApplicationInformation {
     
 	public static Client APPLICATION = ClientBuilder.newClient();
 	
-	public static synchronized JsonObject getResult(String target, boolean appendHost, boolean appendAccessToken) {
+	public static synchronized <T> T getResult(String target, boolean appendHost, boolean appendAccessToken, Class<?> fbObject) {
 		
 		String accessToken = (target.contains("?") ? "&" : "?") + "access_token=";
 		
@@ -54,7 +58,9 @@ public class ApplicationInformation {
 		
 		Response response = request.get();
 		
-		return getJSONObject(response.readEntity(String.class));
+		return (T) new Gson().fromJson(response.readEntity(String.class), fbObject);
+		
+//		return getJSONObject(response.readEntity(String.class));
 		
 //		return null;
 	}
@@ -66,10 +72,10 @@ public class ApplicationInformation {
 	}
 	
 	public static void main(String args[]) {
-		JsonObject object = 
-				getResult("10201750078433170", true, true); 
-		
-		System.out.println(object.getString("name"));
+//		JsonObject object = 
+//				getResult("10201750078433170", true, true, String.class); 
+//		
+//		System.out.println(object.getString("name"));
 	}
 	
 	

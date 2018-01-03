@@ -13,21 +13,22 @@ import newfb.operation.common.ApplicationInformation;
 public class LikeOperation {
 
 	public void getAllLikedPages() {
-		JsonObject pagesObject = ApplicationInformation.getResult("me/likes", true, true);
-		LikeObject likeObject = new Gson().fromJson(pagesObject.toString(), LikeObject.class);
-
-		LikeInterface[] likes = likeObject.getData();
-		for (LikeInterface like : likes) {
-			System.out.println(like.getName());
+		boolean isNext = true;
+		LikeObject likeObject = ApplicationInformation.getResult("me/likes", true, true, LikeObject.class);
+		
+		while(isNext && likeObject != null && likeObject.getData() != null) {
+			
+			LikeInterface[] likes = likeObject.getData();
+			for (LikeInterface like : likes) {
+				System.out.println(like.getName());
+			}
+			
+			if (likeObject.getNextPage() == null || likeObject.getNextPage().trim().length() <= 0) {
+				isNext = false;
+			} else {
+				likeObject = ApplicationInformation.getResult(likeObject.getNextPage().trim(), false, false, LikeObject.class);
+			}
 		}
-		
-//		System.out.println(pagesObject.toString());
-//		System.out.println(likeObject.isError());
-//		System.out.println(likeObject.getErrorMsg());
-//		System.out.println(likeObject.getData());
-//		System.out.println(likeObject.getNextPage());
-		
-		
 	}
 	
 	public static void main(String args[]) {
