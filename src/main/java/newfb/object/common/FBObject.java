@@ -4,10 +4,12 @@ import fb.object.PagingFB;
 
 public abstract class FBObject {
 
-	private Paging paging;
+	protected Paging paging;
 	private Error error;
 	
 	public abstract DataInterface[] getData();
+	
+	protected abstract Paging getPaging();
 	
 	public boolean isError() {
 		return error == null ? false : true;
@@ -22,23 +24,23 @@ public abstract class FBObject {
 	}
 	
 	public String getNextPage() {
-		if (paging != null && paging.next != null && paging.next.trim().length() > 0) {
-			return paging.next.trim();
+		if (getPaging() != null && getPaging().next != null && getPaging().next.trim().length() > 0) {
+			return getPaging().next.trim();
 		} 
 		
 		return null;
 	}
 	
 	public String getPreviousPage() {
-		if (paging != null && paging.previous != null && paging.previous.trim().length() > 0) {
-			return paging.previous.trim();
+		if (getPaging() != null && getPaging().previous != null && getPaging().previous.trim().length() > 0) {
+			return getPaging().previous.trim();
 		}
 		
 		return null;
 	}
 	
 	
-	private class Paging {
+	protected class Paging {
 		private String next;
 		private String previous;
 		

@@ -27,7 +27,7 @@ public class ApplicationInformation {
 
 	public static String APP_ID = "1531281533583122";
 	public static String APP_SECRET = "3703878aca02b5341adf0bb9b0f8caef";
-	public static String APP_ACCESS_TOKEN = "EAACEdEose0cBAIMi1MuEqCDZC1JR18wXegQBUDmuW0wqeaiUYzoeRAn01LgZAZBc26kduwWkTFgKAgWEnCrY3ZAAXWSgiVWwdOq7DwXu1jZAUmQnuwRMCg8VilJwsZBrradV7gE4BYdIuUsHzjjZBpG9sAOtajPvZAmDXyXanJNM2ZCzO0ouZAc07KB2tPU4Nlo6QZD";
+	public static String APP_ACCESS_TOKEN = "EAACEdEose0cBAMFMNOzFfTtGeMk6J9jK3PRF718WVtVykzRVZCZBtTQcP4PhKA4Dxt71pGMdIL3fHnHZBbe7KC9sK1lEZBArrZA3Jy46111QsqcZAzljfh3R9W5ldoPYSUoRrFxUQUPS41pOZCXFZAMcUT6wAi9yWTiGaEjg4LF6tMFLO2rfgp3oXvLSZC4ysk5UvEcoQAicbHQZDZD";
 	
 	public static String HOST_GRAPH_API = "https://graph.facebook.com";
 	public static String VERSION = "v2.10";

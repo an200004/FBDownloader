@@ -16,6 +16,12 @@ public class LikeObject extends FBObject {
 		return null;
 	}
 	
+	@Override
+	protected Paging getPaging() {
+		return super.paging;
+				
+	}
+	
 	private class LikeObjectInternal implements LikeInterface {
 		
 		private String name;

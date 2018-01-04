@@ -19,21 +19,13 @@ public class AlbumObject extends FBObject {
 	}
 	
 	@Override
-	public String getNextPage() {
-		if (super.getNextPage() != null) {
-			return super.getNextPage();
+	protected Paging getPaging() {
+		if (albums != null && albums.getPaging() != null) {
+			return albums.getPaging();
 		} else {
-			return albums == null ? null : albums.getNextPage();
+			return super.paging;
 		}
-	}
-	
-	@Override
-	public String getPreviousPage() {
-		if (super.getPreviousPage() != null) {
-			return super.getPreviousPage();
-		} else {
-			return albums == null ? null : albums.getPreviousPage();
-		}
+		
 	}
 	
 	private class AlbumObjectInternal2 extends FBObject {
@@ -45,6 +37,11 @@ public class AlbumObject extends FBObject {
 				return data;
 			}
 			return null;
+		}
+
+		@Override
+		protected Paging getPaging() {
+			return super.paging;
 		}
 
 	}
