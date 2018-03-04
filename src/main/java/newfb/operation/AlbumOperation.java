@@ -2,12 +2,17 @@ package newfb.operation;
 
 import newfb.object.album.AlbumInterface;
 import newfb.object.album.AlbumObject;
+import newfb.object.common.FBObject;
 import newfb.object.like.LikeObject;
 import newfb.operation.common.ApplicationInformation;
+import newfb.operation.common.FBOperation;
 
-public class AlbumOperation {
+public class AlbumOperation extends FBOperation {
 
 	public void getPageAlbum(String pageId) {
+		
+		sleepWithError();
+		
 		boolean isNext = true;
 		
 		AlbumObject albumObject = ApplicationInformation.getResult(pageId + "?fields=albums", true, true, AlbumObject.class);

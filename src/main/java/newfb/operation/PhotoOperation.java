@@ -6,10 +6,13 @@ import newfb.object.photo.PhotoDetailObject;
 import newfb.object.photo.PhotoInterface;
 import newfb.object.photo.PhotoObject;
 import newfb.operation.common.ApplicationInformation;
+import newfb.operation.common.FBOperation;
 
-public class PhotoOperation {
+public class PhotoOperation extends FBOperation {
 
 	public void getAlbumPhotos(String albumId) {
+		sleepWithError();
+		
 		boolean isNext = true;
 		PhotoObject photoObject = ApplicationInformation.getResult(albumId + "?fields=photos", true, true, PhotoObject.class);
 		
@@ -28,6 +31,8 @@ public class PhotoOperation {
 	}
 	
 	public void getPhotoDetail(String photoId) {
+		sleepWithError();
+		
 		PhotoDetailObject photoDetailObject = ApplicationInformation.getResult(photoId + "?fields=images", true, true, PhotoDetailObject.class);
 		
 		if (photoDetailObject != null) {

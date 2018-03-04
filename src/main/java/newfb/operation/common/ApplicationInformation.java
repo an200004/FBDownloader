@@ -37,7 +37,7 @@ public class ApplicationInformation {
     public static final String PAGE_ALBUM_PHOTO_QUEUE_NAME = "fb_pages_albums_photo";
     public static final String PAGE_ALBUM_PHOTO_DETAIL_QUEUE_NAME = "fb_pages_albums_photo_detail";
 	
-    public static AtomicBoolean error = new AtomicBoolean(false);
+    public static AtomicBoolean ERROR = new AtomicBoolean(false);
     
 	public static Client APPLICATION = ClientBuilder.newClient();
 	
@@ -58,7 +58,17 @@ public class ApplicationInformation {
 		
 		Response response = request.get();
 		
-		return (T) new Gson().fromJson(response.readEntity(String.class), fbObject);
+		T t = (T) new Gson().fromJson(response.readEntity(String.class), fbObject);
+		
+		if (t instanceof FBObject) {
+			if (((FBObject)t).isError()) {
+				ERROR = new AtomicBoolean(true);
+			} else {
+				ERROR = new AtomicBoolean(false);
+			}
+		}
+		return t;
+//		return (T) new Gson().fromJson(response.readEntity(String.class), fbObject);
 		
 //		return getJSONObject(response.readEntity(String.class));
 		

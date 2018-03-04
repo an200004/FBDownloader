@@ -5,7 +5,49 @@
   <version>0.0.1-SNAPSHOT</version>
   <packaging>war</packaging>
     <dependencies>
-  	<dependency>
+    <!-- dependency>
+    	<groupId>org.springframework.boot</groupId>
+    	<artifactId>spring-boot-starter-jersey</artifactId>
+    	<version>1.5.10.RELEASE</version>
+    	<exclusions>
+    		<exclusion>
+    			<groupId>org.springframework</groupId>
+    			<artifactId>spring-aop</artifactId>
+    		</exclusion>
+    		<exclusion>
+    			<groupId>org.springframework</groupId>
+    			<artifactId>spring-core</artifactId>
+    		</exclusion>
+    	</exclusions>
+    </dependency>
+    <dependency>
+	    <groupId>org.glassfish.hk2</groupId>
+	    <artifactId>hk2</artifactId>
+	    <version>2.5.0-b61</version>
+	</dependency-->
+	    
+	<!-- dependency>
+	    <groupId>org.springframework</groupId>
+	    <artifactId>spring-aop</artifactId>
+	    <version>4.3.14.RELEASE</version>
+	    <exclusions>
+	    	<exclusion>
+	    		<groupId>org.springframework</groupId>
+	    		<artifactId>spring-core</artifactId>
+	    	</exclusion>
+	    </exclusions>
+	</dependency>
+	<dependency>
+		<groupId>org.springframework</groupId>
+		<artifactId>spring-core</artifactId>
+		<version>5.0.0.RELEASE</version>
+	</dependency-->
+	<dependency>
+    <groupId>org.glassfish.jersey.inject</groupId>
+	    <artifactId>jersey-hk2</artifactId>
+	    <version>2.5.0-b36</version>
+	</dependency>
+    <dependency>
   		<groupId>org.hibernate</groupId>
   		<artifactId>hibernate-core</artifactId>
   		<version>5.2.10.Final</version>
@@ -19,24 +61,21 @@
   		<groupId>javax.ws.rs</groupId>
   		<artifactId>javax.ws.rs-api</artifactId>
   		<version>2.1-m07</version>
-  		<scope>provided</scope>
   	</dependency>
   	<dependency>
   		<groupId>org.glassfish.jersey.containers</groupId>
   		<artifactId>jersey-container-servlet</artifactId>
-  		<version>2.25.1</version>
-  		<scope>provided</scope>
+  		<version>2.26</version>
   	</dependency>
   	<dependency>
   		<groupId>org.glassfish.jersey.core</groupId>
   		<artifactId>jersey-client</artifactId>
-  		<version>2.25.1</version>
-  		<scope>provided</scope>
+  		<version>2.26</version>
   	</dependency>
   	<dependency>
   		<groupId>javax.json</groupId>
   		<artifactId>javax.json-api</artifactId>
-  		<version>1.1</version>
+  		<version>1.1.2</version>
   	</dependency>
   	<dependency>
   		<groupId>org.glassfish</groupId>
@@ -58,10 +97,30 @@
   		<artifactId>genson</artifactId>
   		<version>1.4</version>
 	</dependency>
+	<!-- dependency>
+	    <groupId>org.slf4j</groupId>
+	    <artifactId>slf4j-api</artifactId>
+	    <version>1.7.25</version>
+	</dependency>
+	<dependency>
+	    <groupId>org.slf4j</groupId>
+	    <artifactId>slf4j-log4j12</artifactId>
+	    <version>1.7.25</version>
+    	<scope>test</scope>
+	</dependency-->
     </dependencies>
     <properties>
     	<maven.compiler.source>1.8</maven.compiler.source>
     	<maven.compiler.target>1.8</maven.compiler.target>
     	<failOnMissingWebXml>false</failOnMissingWebXml>
     </properties>
+    <!-- dependencyManagement>
+    	<dependencies>
+    		<dependency>
+    			<groupId>org.springframework</groupId>
+    			<artifactId>spring-core</artifactId>
+    			<version>5.0.4.RELEASE</version>
+    		</dependency>
+    	</dependencies>
+    </dependencyManagement-->
 </project>
