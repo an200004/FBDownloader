@@ -37,7 +37,7 @@ public class ApplicationInformation {
     public static final String PAGE_ALBUM_PHOTO_QUEUE_NAME = "fb_pages_albums_photo";
     public static final String PAGE_ALBUM_PHOTO_DETAIL_QUEUE_NAME = "fb_pages_albums_photo_detail";
 	
-    public static AtomicBoolean ERROR = new AtomicBoolean(false);
+    public static AtomicBoolean ERROR = new AtomicBoolean(true);
     
 	public static Client APPLICATION = ClientBuilder.newClient();
 	

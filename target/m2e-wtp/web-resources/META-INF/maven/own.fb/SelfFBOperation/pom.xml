@@ -43,9 +43,9 @@
 		<version>5.0.0.RELEASE</version>
 	</dependency-->
 	<dependency>
-    <groupId>org.glassfish.jersey.inject</groupId>
+    	<groupId>org.glassfish.jersey.inject</groupId>
 	    <artifactId>jersey-hk2</artifactId>
-	    <version>2.5.0-b36</version>
+	    <version>2.26</version>
 	</dependency>
     <dependency>
   		<groupId>org.hibernate</groupId>
