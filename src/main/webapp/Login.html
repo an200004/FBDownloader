@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="ISO-8859-1">
+<title>Insert title here</title>
+</head>
+<body>
+<script>
+  window.fbAsyncInit = function() {
+    FB.init({
+      appId            : '1531281533583122',
+      autoLogAppEvents : true,
+      xfbml            : true,
+      version          : 'v2.10'
+    });
+    
+    FB.getLoginStatus(function(response) {
+  	    //statusChangeCallback(response);
+  	    
+  	    if (response.status == 'unknown') {
+  	    	FB.login(function(loginResponse){
+  	    		if (loginResponse.status == 'connected') {
+  	    	  		var redirectedURL = "http://localhost:8080/SelfFBOperation/resources/wsoperation/accessToken?accessToken=" + loginResponse.authResponse.accessToken;
+  	    	  		window.location.href = redirectedURL;
+  	    		}
+  	    	});
+  	    } else if (response.status == 'connected') {
+  	    	var redirectedURL = "http://localhost:8080/SelfFBOperation/resources/wsoperation/accessToken?accessToken=" + response.authResponse.accessToken;
+  	  		window.location.href = redirectedURL;
+  	    }
+  	});
+  };
+  
+  (function(d, s, id){
+     var js, fjs = d.getElementsByTagName(s)[0];
+     if (d.getElementById(id)) {return;}
+     js = d.createElement(s); js.id = id;
+     js.src = "https://connect.facebook.net/en_US/sdk.js";
+     fjs.parentNode.insertBefore(js, fjs);
+   }(document, 'script', 'facebook-jssdk'));
+  
+  function login() {
+	  alert("test");
+	  FB.login(function(loginResponse){
+    		if (loginResponse.status == 'connected') {
+    	  		var redirectedURL = "http://localhost:8080/SelfFBOperation/resources/wsoperation/accessToken?accessToken=" + loginResponse.authResponse.accessToken;
+    	  		window.location.href = redirectedURL;
+    		}
+    	});
+  }
+  
+</script>
+Perform login...
+
+
+	<!-- fb:login-button id="login"">
+</fb:login-button-->
+
+</body>
+</html>
