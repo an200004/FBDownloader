@@ -23,6 +23,31 @@ public abstract class FBObject {
 		return null;
 	}
 	
+	public String getErrorDetail(String code) {
+		String retVal = null;
+		if (isError()) {
+			switch (code) {
+			case "MESSAGE":
+				retVal = error.message;
+				break;
+			case "TYPE":
+				retVal = error.type;
+				break;
+			case "CODE": 
+				retVal = error.code;
+			case "ERROR_SUBCODE":
+				retVal = error.error_subcode;
+			case "FB_TRACE_ID":
+				retVal = error.fbtrace_id;
+			default:
+				break;
+			}
+			
+		}
+		
+		return retVal;
+	}
+	
 	public String getNextPage() {
 		if (getPaging() != null && getPaging().next != null && getPaging().next.trim().length() > 0) {
 			return getPaging().next.trim();
@@ -64,5 +89,7 @@ public abstract class FBObject {
 	    private String code;
 	    private String error_subcode;
 	    private String fbtrace_id;
+	    
+		
 	}
 }

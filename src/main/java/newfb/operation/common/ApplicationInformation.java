@@ -2,6 +2,7 @@ package newfb.operation.common;
 
 import java.io.StringReader;
 import java.text.MessageFormat;
+import java.util.Date;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 import javax.json.Json;
@@ -19,8 +20,10 @@ import org.glassfish.jersey.client.internal.HttpUrlConnector;
 
 import com.google.gson.Gson;
 
+import fb.db.DBOperation;
 import javassist.expr.NewArray;
 import newfb.object.common.FBObject;
+import newfb.object.db.ErrorDBObject;
 import newfb.object.like.LikeObject;
 
 public class ApplicationInformation {
@@ -43,30 +46,48 @@ public class ApplicationInformation {
 	
 	public static synchronized <T> T getResult(String target, boolean appendHost, boolean appendAccessToken, Class<?> fbObject) {
 		
+		T t = null;
+		
 		String accessToken = (target.contains("?") ? "&" : "?") + "access_token=";
 		
-		System.out.println((appendHost ? HOST_GRAPH_API + "/" + VERSION + "/" : "") 
-				 + target + 
-				(appendAccessToken ? accessToken + APP_ACCESS_TOKEN : ""));
-		
-		WebTarget resource = APPLICATION.target((appendHost ? HOST_GRAPH_API + "/" + VERSION + "/" : "")
-				+ target + 
-				(appendAccessToken ? accessToken + APP_ACCESS_TOKEN : ""));
-		
-		Builder request = resource.request();
-		request.accept(MediaType.APPLICATION_JSON);
-		
-		Response response = request.get();
-		
-		T t = (T) new Gson().fromJson(response.readEntity(String.class), fbObject);
-		
-		if (t instanceof FBObject) {
-			if (((FBObject)t).isError()) {
-				ERROR = new AtomicBoolean(true);
+		while (true) {
+			
+			if (ApplicationInformation.ERROR.get() == true) {
+				try {
+					System.out.println("Get result sleeping...");
+					Thread.sleep(60000);
+				} catch (InterruptedException ie) {
+					ie.printStackTrace();
+				}
 			} else {
-				ERROR = new AtomicBoolean(false);
+			
+				System.out.println((appendHost ? HOST_GRAPH_API + "/" + VERSION + "/" : "") 
+						 + target + 
+						(appendAccessToken ? accessToken + APP_ACCESS_TOKEN : ""));
+				
+				WebTarget resource = APPLICATION.target((appendHost ? HOST_GRAPH_API + "/" + VERSION + "/" : "")
+						+ target + 
+						(appendAccessToken ? accessToken + APP_ACCESS_TOKEN : ""));
+				
+				Builder request = resource.request();
+				request.accept(MediaType.APPLICATION_JSON);
+				
+				Response response = request.get();
+				
+				t = (T) new Gson().fromJson(response.readEntity(String.class), fbObject);
+				
+				if (t instanceof FBObject) {
+					if (((FBObject)t).isError()) {
+						ERROR = new AtomicBoolean(true);
+						saveErrorMessage((FBObject)t);
+						
+					} else {
+						break;
+					}
+				}
 			}
 		}
+		
 		return t;
 //		return (T) new Gson().fromJson(response.readEntity(String.class), fbObject);
 		
@@ -79,6 +100,18 @@ public class ApplicationInformation {
 		JsonReader reader = Json.createReader(new StringReader(jsonInString));
 		
 		return reader.readObject();
+	}
+	
+	private static void saveErrorMessage(FBObject fbObject) {
+		ErrorDBObject error = new ErrorDBObject();
+		error.setCode(fbObject.getErrorDetail("CODE"));
+		error.setErrorSubcode(fbObject.getErrorDetail("ERROR_SUBCODE"));
+		error.setFbTraceId(fbObject.getErrorDetail("FB_TRACE_ID"));
+		error.setMessage(fbObject.getErrorDetail("MESSAGE"));
+		error.setType(fbObject.getErrorDetail("TYPE"));
+		error.setErrorDate(new Date());
+		
+		DBOperation.save(error);
 	}
 	
 	public static void main(String args[]) {

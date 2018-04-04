@@ -14,7 +14,6 @@ import newfb.operation.common.FBOperation;
 public class LikeOperation extends FBOperation {
 
 	public void getAllLikedPages() {
-		sleepWithError();
 		
 		boolean isNext = true;
 		LikeObject likeObject = ApplicationInformation.getResult("me/likes", true, true, LikeObject.class);
