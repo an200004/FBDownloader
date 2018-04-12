@@ -3,7 +3,7 @@ package newfb.operation.common;
 public class FBOperation {
 
 	public boolean hasError() {
-		return ApplicationInformation.ERROR.get();
+		return OperationStatus.ERROR.get();
 	}
 	
 	protected void sleepWithError() {

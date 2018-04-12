@@ -4,13 +4,15 @@
         version="2.0">
     <persistence-unit name="persistentUnit">
         <provider>org.hibernate.jpa.HibernatePersistenceProvider</provider>
+
 	    <properties>
 	      <property name="javax.persistence.jdbc.driver" value="com.microsoft.sqlserver.jdbc.SQLServerDriver" />
-	      <property name="javax.persistence.jdbc.url" value="jdbc:sqlserver://fboperatation.database.windows.net:1433" />
+	      <property name="javax.persistence.jdbc.url" value="jdbc:sqlserver://fboperatation.database.windows.net:1433;database=FB" />
 	      <property name="javax.persistence.jdbc.user" value="fb_user@fboperatation" />
 	      <property name="javax.persistence.jdbc.password" value="Pal0m1n0" />
 	      <property name="hibernate.show_sql" value="true" />
 	      <property name="hibernate.hbm2ddl.auto" value="update" />
+	      <property name="hibernate.connection.autocommit" value="true" />
 	    </properties>
     </persistence-unit>
 </persistence>

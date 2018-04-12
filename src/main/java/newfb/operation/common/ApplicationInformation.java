@@ -40,8 +40,6 @@ public class ApplicationInformation {
     public static final String PAGE_ALBUM_PHOTO_QUEUE_NAME = "fb_pages_albums_photo";
     public static final String PAGE_ALBUM_PHOTO_DETAIL_QUEUE_NAME = "fb_pages_albums_photo_detail";
 	
-    public static AtomicBoolean ERROR = new AtomicBoolean(true);
-    
 	public static Client APPLICATION = ClientBuilder.newClient();
 	
 	public static synchronized <T> T getResult(String target, boolean appendHost, boolean appendAccessToken, Class<?> fbObject) {
@@ -52,7 +50,7 @@ public class ApplicationInformation {
 		
 		while (true) {
 			
-			if (ApplicationInformation.ERROR.get() == true) {
+			if (OperationStatus.ERROR.get() == true) {
 				try {
 					System.out.println("Get result sleeping...");
 					Thread.sleep(60000);
@@ -78,7 +76,7 @@ public class ApplicationInformation {
 				
 				if (t instanceof FBObject) {
 					if (((FBObject)t).isError()) {
-						ERROR = new AtomicBoolean(true);
+						OperationStatus.ERROR.set(true);
 						saveErrorMessage((FBObject)t);
 						
 					} else {

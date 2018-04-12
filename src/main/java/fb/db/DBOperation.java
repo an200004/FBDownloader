@@ -7,7 +7,8 @@ import javax.persistence.EntityManager;
 import javax.persistence.Persistence;
 import javax.transaction.Transactional;
 
-import fb.object.Page;
+import newfb.object.db.Page;
+import newfb.object.db.SaltDetail;
 import fb.object.DownloadedPhotoDB;;
 
 public class DBOperation {
@@ -52,5 +53,19 @@ public class DBOperation {
 
 	public static DownloadedPhotoDB getDownloadedPhoto(String photoId) {
 		return em.find(DownloadedPhotoDB.class, photoId);
+	}
+	
+	public static String getSalt(String type) {
+		String salt = null;
+		switch (type) {
+			case "Email":
+				salt = em.createNamedQuery("SaltDetail.getEmailSalt", SaltDetail.class).getSingleResult().getSaltDetail();
+				break;
+			case "Passwd":
+				salt = em.createNamedQuery("SaltDetail.getSalt", SaltDetail.class).getSingleResult().getSaltDetail();
+				break;
+			default:
+		} 
+		return salt;
 	}
 }

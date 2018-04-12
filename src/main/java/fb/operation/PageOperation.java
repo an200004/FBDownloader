@@ -16,7 +16,7 @@ import com.google.gson.Gson;
 
 import fb.db.DBOperation;
 import fb.object.Album;
-import fb.object.Page;
+import fb.object.Page_Obsolete;
 import fb.object.PageAlbumsFB;
 import fb.object.PageFB;
 import fb.queue.QueueManagement;
@@ -29,7 +29,7 @@ public class PageOperation {
 	@Path("allpages")
 	public String allPages() {
 		
-		List<Page> pages = new ArrayList<Page>();
+		List<Page_Obsolete> pages = new ArrayList<Page_Obsolete>();
 		
 		JsonObject pagesObject = ApplicationInformation.getResult("me/likes", true, true);
 		PageFB pageFb = new Gson().fromJson(pagesObject.toString(), PageFB.class);
@@ -38,11 +38,11 @@ public class PageOperation {
 			
 			for (PageFB.PageFBData pageFbData : pageFb.getData()) {
 				if (DBOperation.getPage(pageFbData.getId()) == null) {
-					Page page = new Page();
-					page.setId(pageFbData.getId());
-					page.setName(pageFbData.getName());
-					page.setExclude(true);
-					pages.add(page);
+					Page_Obsolete Page_Obsolete = new Page_Obsolete();
+					Page_Obsolete.setId(pageFbData.getId());
+					Page_Obsolete.setName(pageFbData.getName());
+					Page_Obsolete.setExclude(true);
+					pages.add(Page_Obsolete);
 					System.out.println(pageFbData.getName());
 				}
 			}
@@ -64,9 +64,9 @@ public class PageOperation {
 		return "";
 	}
 	
-	public String getPageAlbums(Page page) {
+	public String getPageAlbums(Page_Obsolete Page_Obsolete) {
 		
-			JsonObject albumObject = ApplicationInformation.getResult(MessageFormat.format("{0}?fields=albums", page.getId().trim()), true, true);
+			JsonObject albumObject = ApplicationInformation.getResult(MessageFormat.format("{0}?fields=albums", Page_Obsolete.getId().trim()), true, true);
 			
 			PageAlbumsFB pageAlbumsFb =  new Gson().fromJson(albumObject.toString(), PageAlbumsFB.class);
 			
@@ -75,7 +75,7 @@ public class PageOperation {
 					Album albumObj = new Album();
 					albumObj.setId(albumFB.getId());
 					albumObj.setName(albumFB.getName());
-					albumObj.setPage_name(page.getName());
+					albumObj.setPage_name(Page_Obsolete.getName());
 					QueueManagement.sendMessage(new Gson().toJson(albumObj), ApplicationInformation.QUEUE_CONNECTION_STRING, ApplicationInformation.PAGE_ALBUM_QUEUE_NAME);
 					System.out.println(albumObj.getName());
 					
@@ -93,10 +93,10 @@ public class PageOperation {
 		return "";
 	}
 	
-	public List<Page> findRequiredPages() {
-		List<Page> pages = DBOperation.getExcludePages();
+	public List<Page_Obsolete> findRequiredPages() {
+//		List<Page_Obsolete> pages = DBOperation.getExcludePages();
 		
-		return pages;
+		return null; //pages;
 	}
 	
 	public static void main(String args[]) {

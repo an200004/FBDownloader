@@ -12,10 +12,10 @@ import javax.persistence.Table;
 @Entity
 @Table(name="Page")
 @NamedQueries(
-		@NamedQuery(name="Page.findInclude",
+		@NamedQuery(name="Old.Page.findInclude",
 				query="SELECT p FROM Page p where p.exclude = false")
 )
-public class Page implements Serializable{
+public class Page_Obsolete implements Serializable{
 
 	/**
 	 * 

@@ -6,6 +6,7 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 
 import newfb.operation.LikeOperation;
+import newfb.operation.common.OperationStatus;
 
 @Path("likeoperation")
 public class LikeOperationWS {
@@ -32,5 +33,12 @@ public class LikeOperationWS {
 		return "Get all pages executing";
 		
 		
+	}
+	
+	@GET
+	@Path("allPagesExecutionStatus")
+	@Produces(MediaType.TEXT_PLAIN)
+	public String getAllPagesExecutionStatus() {
+		return OperationStatus.GETALLPAGES_EXECUTING.toString();
 	}
 }
